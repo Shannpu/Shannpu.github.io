@@ -7,6 +7,8 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import ParseResultRender from "./ParseResultRender.vue";
+
+import RegularDerive from "@/plugins/regular";
 import { DESC_TIPS, parseRegular } from "@/utils/regular.js";
 
 
@@ -20,8 +22,9 @@ const regExp = ref(null);
 // const regExp = ref("^(us|(US|AM))(en|EN)|(CN|cn)$");
 // const regExp = ref("((c|d)|(ab))|VB");
 // const regExp = ref("^us|(US|AM)");
-// const regExp = ref("F{0,2}");
+// const regExp = ref("\\daB-D{1,4}[123A-C]?3443[\\w343]+4{1,4}"); //  \dADF{0,2}
 // const regExp = ref("^[+]{0,1}(\d+)$");
+// const regExp = ref("[^\\:*<>\|"\?\r\n/]");
 
 // 解析结果数据
 const parseRes = ref([]);
@@ -31,8 +34,15 @@ const parseResTree = reactive({
   expand: true,
   children: [],
 });
+// EBNF 解析的语法树
+const astResTree = reactive({
+  content: 'AST(EBNF)',
+  type: 'root',
+  expand: true,
+  children: [],
+});
 // 解析结果, 不同展示形式
-const activeParseResultKey = ref('tree');
+const activeParseResultKey = ref('ast');
 
 
 onMounted(() => {
@@ -45,7 +55,7 @@ onMounted(() => {
 function onParse() {
   console.log("Input regExp:", regExp.value);
   if (!regExp.value) return;
-
+  
   let regRes = parseRegular(regExp.value);
   parseRes.value = regRes;
 
@@ -54,12 +64,21 @@ function onParse() {
 
   console.log("regRes:", regRes);
   console.log("parseResTree:", parseResTree);
+
+  // EBNF 解析的语法树
+  let regDerive = new RegularDerive(regExp.value);
+  console.log("RegularDerive:", regDerive);
+
+  astResTree.content = regExp.value;
+  astResTree.children = setExpand(regDerive.ast, true);
 }
 
 /**
  * 方法: 设置展开/收起状态
  */
 function setExpand(arr, expand) {
+  if (!arr) return [];
+
   arr.forEach(item => {
     if (item.children) {
       item.expand = expand;
@@ -126,7 +145,36 @@ function setExpand(arr, expand) {
                     <div class="prefix" v-show="data.prefix" style="white-space: nowrap;">{{ data.prefix }}</div>
                     <div class="content">
                       <div style="white-space: nowrap;">{{ data.expr }}</div>
-                      <!-- <div style="white-space: nowrap;">{{ data.type }}</div> -->
+                      <div style="white-space: nowrap;">{{ data.type }}</div>
+                    </div>
+                    <div class="suffix" v-show="data.suffix" style="white-space: nowrap;">{{ data.suffix }}</div>
+                  </div>
+                </template>
+              </blocks-tree>
+            </div>
+          </a-tab-pane>
+
+          <!-- EBNF -->
+          <a-tab-pane key="ast" tab="AST">
+            <div class="parse-result">
+              <blocks-tree 
+                :data="astResTree" 
+                :horizontal="false" 
+                :collapsable="true"
+                :props="{label: 'content', expand: 'expand', children: 'children',  key:'content'}"
+              >
+                <template #node="{data}">
+                  <!-- <div class="range-wrap" v-if="data.type.includes('range') && data.options?.length > 0">
+                    <div v-for="option in data.options" class="option">
+                      <span style="white-space: nowrap;">{{ option.content }}</span>
+                      <span>{{ option.type }}</span>
+                    </div>
+                  </div> -->
+                  <div class="node-wrap">
+                    <div class="prefix" v-show="data.prefix" style="white-space: nowrap;">{{ data.prefix }}</div>
+                    <div class="content">
+                      <div style="white-space: nowrap;">{{ data.content }}</div>
+                      <div style="white-space: nowrap;">{{ data.type }}</div>
                     </div>
                     <div class="suffix" v-show="data.suffix" style="white-space: nowrap;">{{ data.suffix }}</div>
                   </div>

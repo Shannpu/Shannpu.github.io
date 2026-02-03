@@ -30,7 +30,7 @@ const regExp = ref(null);
 const parseRes = ref([]);
 // EBNF 解析的语法树
 const astResTree = reactive({
-  content: 'AST(EBNF)',
+  content: '语法树',
   type: 'root',
   expand: true,
   children: [],
@@ -140,6 +140,7 @@ function setExpand(arr, expand) {
                       <!-- <div style="white-space: nowrap;">{{ data.type }}</div> -->
                     </div>
                     <div class="suffix" v-show="data.suffix" style="white-space: nowrap;">{{ data.suffix }}</div>
+                    <div class="quant" v-show="data.quant" style="white-space: nowrap;">{{ data.quant }}</div>
                   </div>
                 </template>
               </blocks-tree>
@@ -305,34 +306,37 @@ function setExpand(arr, expand) {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: #f5ebeb;
 
     .content {
       font-size: 15px;
-      padding: 2px 6px;
+      padding: 2px 4px;
       background-color: #e9ebec;
+      color: #333;
     };
 
-    .prefix, .suffix {
-      padding: 2px 6px;
+    .prefix, .suffix, .quant {
+      padding: 2px 4px;
       font-weight: 600;
-      color: #5f1fad;
+      background-color: #e2eff9;
+      color: #5588ff;
+      // background-color: #f5ebeb;
+      // color: #5f1fad;
     }
   }
   // 逻辑或，分组
   .node-wrap.or, 
   .node-wrap.groupCont, 
   .node-wrap.groupCont_quant {
-    background-color: #ddf1df;
     .prefix, .suffix {
+      background-color: #ddf1df;
       color: #00aa00;
     }
   }
   // 字符集
   .node-wrap.rangeCont, 
   .node-wrap.rangeCont_quant {
-    background-color: #f4f0b6;
     .prefix, .suffix {
+      background-color: #f4f0b6;
       color: #dd7700;
     }
   }
@@ -340,13 +344,13 @@ function setExpand(arr, expand) {
   .range-wrap {
     display: flex;
     flex-direction: column;
-    row-gap: 4px;
-    padding: 6px 6px;
+    row-gap: 2px;
+    padding: 4px 4px;
     background-color: #fef499;
 
     .option {
       font-size: 15px;
-      padding: 0px 6px;
+      padding: 0px 4px;
       background-color: @bgPrimary;
     }
   }

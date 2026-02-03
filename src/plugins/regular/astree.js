@@ -781,13 +781,14 @@ function mergeLimitQuant(outArr) {
           ...curr,
           content: contArr[1],
           type: currType + "_" + nextType,
-          suffix: nextCont
+          quant: nextCont
         });
       } else {
         mergeArr.push({
           ...curr,
           type: currType + "_" + nextType,
-          suffix: currSuffix + nextCont
+          suffix: currSuffix,
+          quant: nextCont
         });
       }
       i++;

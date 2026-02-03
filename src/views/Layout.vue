@@ -145,6 +145,7 @@ function toggleTheme(colorNew) {
   flex-direction: row;
   align-items: center;
   justify-content: start;
+  column-gap: 0;
   
   .icon {
     width: 32px;

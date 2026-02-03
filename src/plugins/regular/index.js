@@ -1,5 +1,5 @@
 import { toNodeArr } from "./nodeArr.js";
-import { toAstree } from "./astree.js";
+import { toAstree, Node_Type } from "./astree.js";
 
 class RegularDerive {
 
@@ -31,13 +31,13 @@ class RegularDerive {
   static {
     // 静态初始化代码
   }
-  // 静态字段
-  static myStaticField = "bar";
   // 静态方法
   static myStaticMethod() {
     // myStaticMethod 主体
-  }
-  */
+    }
+    */
+  // 静态字段
+  static nodeType = Node_Type;
 
   /*
   // 实例字段

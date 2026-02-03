@@ -28,12 +28,6 @@ const regExp = ref(null);
 
 // 解析结果数据
 const parseRes = ref([]);
-const parseResTree = reactive({
-  expr: '语法树',
-  type: 'root',
-  expand: true,
-  children: [],
-});
 // EBNF 解析的语法树
 const astResTree = reactive({
   content: 'AST(EBNF)',
@@ -59,12 +53,6 @@ function onParse() {
   let regRes = parseRegular(regExp.value);
   parseRes.value = regRes;
 
-  parseResTree.expr = regExp.value;
-  parseResTree.children = setExpand(regRes, true);
-
-  console.log("regRes:", regRes);
-  console.log("parseResTree:", parseResTree);
-
   // EBNF 解析的语法树
   let regDerive = new RegularDerive(regExp.value);
   console.log("RegularDerive:", regDerive);
@@ -80,8 +68,8 @@ function setExpand(arr, expand) {
   if (!arr) return [];
 
   arr.forEach(item => {
+    item.expand = expand;
     if (item.children) {
-      item.expand = expand;
       setExpand(item.children, expand);
     }
   });
@@ -121,41 +109,16 @@ function setExpand(arr, expand) {
           <template #leftExtra>
             <p class="title">解析结果</p>
           </template>
+
+          <!-- 收缩面板 -->
           <a-tab-pane key="panel" tab="收缩面板">
             <div class="parse-result">
               <ParseResultRender v-model:data-source="parseRes" />
             </div>
           </a-tab-pane>
-          <a-tab-pane key="tree" tab="语法树">
-            <div class="parse-result">
-              <blocks-tree 
-                :data="parseResTree" 
-                :horizontal="false" 
-                :collapsable="true"
-                :props="{label: 'expr', expand: 'expand', children: 'children',  key:'expr'}"
-              >
-                <template #node="{data}">
-                  <div class="range-wrap" v-if="data.type.includes('range') && data.options?.length > 0">
-                    <div v-for="option in data.options" class="option">
-                      <span style="white-space: nowrap;">{{ option.expr }}</span>
-                      <!-- <span>{{ option.type }}</span> -->
-                    </div>
-                  </div>
-                  <div class="node-wrap" v-else="data.type == ''">
-                    <div class="prefix" v-show="data.prefix" style="white-space: nowrap;">{{ data.prefix }}</div>
-                    <div class="content">
-                      <div style="white-space: nowrap;">{{ data.expr }}</div>
-                      <div style="white-space: nowrap;">{{ data.type }}</div>
-                    </div>
-                    <div class="suffix" v-show="data.suffix" style="white-space: nowrap;">{{ data.suffix }}</div>
-                  </div>
-                </template>
-              </blocks-tree>
-            </div>
-          </a-tab-pane>
 
-          <!-- EBNF -->
-          <a-tab-pane key="ast" tab="AST">
+          <!-- ast 语法树 -->
+          <a-tab-pane key="ast" tab="语法树">
             <div class="parse-result">
               <blocks-tree 
                 :data="astResTree" 
@@ -164,17 +127,17 @@ function setExpand(arr, expand) {
                 :props="{label: 'content', expand: 'expand', children: 'children',  key:'content'}"
               >
                 <template #node="{data}">
-                  <!-- <div class="range-wrap" v-if="data.type.includes('range') && data.options?.length > 0">
+                  <div class="range-wrap" v-if="data.type.includes(RegularDerive.nodeType.RANGE) && data.options?.length > 0">
                     <div v-for="option in data.options" class="option">
                       <span style="white-space: nowrap;">{{ option.content }}</span>
-                      <span>{{ option.type }}</span>
+                      <!-- <span>{{ option.type }}</span> -->
                     </div>
-                  </div> -->
-                  <div class="node-wrap">
+                  </div>
+                  <div class="node-wrap" :class="[data.type]" v-else>
                     <div class="prefix" v-show="data.prefix" style="white-space: nowrap;">{{ data.prefix }}</div>
                     <div class="content">
                       <div style="white-space: nowrap;">{{ data.content }}</div>
-                      <div style="white-space: nowrap;">{{ data.type }}</div>
+                      <!-- <div style="white-space: nowrap;">{{ data.type }}</div> -->
                     </div>
                     <div class="suffix" v-show="data.suffix" style="white-space: nowrap;">{{ data.suffix }}</div>
                   </div>
@@ -342,18 +305,35 @@ function setExpand(arr, expand) {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    // background-color: #e0f1fc;
     background-color: #f5ebeb;
 
     .content {
       font-size: 15px;
       padding: 2px 6px;
-      background-color: @bgPrimary;
+      background-color: #e9ebec;
     };
 
     .prefix, .suffix {
       padding: 2px 6px;
+      font-weight: 600;
       color: #5f1fad;
+    }
+  }
+  // 逻辑或，分组
+  .node-wrap.or, 
+  .node-wrap.groupCont, 
+  .node-wrap.groupCont_quant {
+    background-color: #ddf1df;
+    .prefix, .suffix {
+      color: #00aa00;
+    }
+  }
+  // 字符集
+  .node-wrap.rangeCont, 
+  .node-wrap.rangeCont_quant {
+    background-color: #f4f0b6;
+    .prefix, .suffix {
+      color: #dd7700;
     }
   }
 
@@ -436,7 +416,7 @@ function setExpand(arr, expand) {
 }
 :deep(.org-tree-node-label-inner) {
   padding: 0;
-  border: 1px solid #c3c7cb;
+ // border: 1px solid #c3c7cb;
   box-shadow: none
 }
 

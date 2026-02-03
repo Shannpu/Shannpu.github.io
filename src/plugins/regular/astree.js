@@ -70,7 +70,7 @@ digit      ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 
 // 节点类型
-const Node_Type = {
+export const Node_Type = {
   OR: "or",   // 分割符
   ANCHOR: "anchor", // 位置边界
   QUANT: "quant",  // 限定符
@@ -138,6 +138,8 @@ function parseOr(contOut, isParent = false) {
       return [{
         content: contOut,
         type: Node_Type.OR,
+        prefix: " ",
+        suffix: " ",
         children: parseAnchor(contOut)
       }];
     } else {
@@ -151,10 +153,12 @@ function parseOr(contOut, isParent = false) {
   const splitArr = splitFromIndex(contOut, matchInd, matchInd + matchChar.length);
   // console.log("[ parseGroup ]:", splitArr);
   
-  // 前项 Anchor todo
+  // 前项 Anchor
   viewData.push({
     content: splitArr[0],
     type: Node_Type.OR,
+    prefix: " ",
+    suffix: " ",
     children: parseAnchor(splitArr[0])
   });
   // 分割项 Or_Cont
@@ -426,7 +430,7 @@ function parseGroupCont(contOut) {
   // 没有时
   if (!contOut) return [];
 
-  const prefix = "(", suffix = ")";
+  let prefix = "(", suffix = ")";
   let content = contOut.slice(1, -1);
 
   const execPre = /^\?<?[:=!]/.exec(content); // todo 正则有问题
@@ -452,7 +456,7 @@ function parseRangeCont(contOut) {
   // 没有时
   if (!contOut) return [];
 
-  const prefix = "[", suffix = "]";
+  let prefix = "[", suffix = "]";
   let content = contOut.slice(1, -1);
 
   const execPre = /^\^/.exec(content);
@@ -467,7 +471,10 @@ function parseRangeCont(contOut) {
     type: Node_Type.RANGE_CONT,
     prefix,
     suffix,
-    children: parseInRange(content)
+    children:[{
+      type: Node_Type.RANGE,
+      options: parseInRange(content)
+    }]
   }];
 }
 

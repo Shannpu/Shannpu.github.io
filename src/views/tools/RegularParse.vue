@@ -50,15 +50,14 @@ function onParse() {
   console.log("Input regExp:", regExp.value);
   if (!regExp.value) return;
   
-  let regRes = parseRegular(regExp.value);
-  parseRes.value = regRes;
-
   // EBNF 解析的语法树
   let regDerive = new RegularDerive(regExp.value);
   console.log("RegularDerive:", regDerive);
-
+  
   astResTree.content = regExp.value;
   astResTree.children = setExpand(regDerive.ast, true);
+
+  parseRes.value = regDerive.ast;
 }
 
 /**
@@ -111,11 +110,11 @@ function setExpand(arr, expand) {
           </template>
 
           <!-- 收缩面板 -->
-          <a-tab-pane key="panel" tab="收缩面板">
+          <!-- <a-tab-pane key="panel" tab="收缩面板">
             <div class="parse-result">
               <ParseResultRender v-model:data-source="parseRes" />
             </div>
-          </a-tab-pane>
+          </a-tab-pane> -->
 
           <!-- ast 语法树 -->
           <a-tab-pane key="ast" tab="语法树">
@@ -351,7 +350,7 @@ function setExpand(arr, expand) {
     .option {
       font-size: 15px;
       padding: 0px 4px;
-      background-color: @bgPrimary;
+      background-color: #e9ebec;
     }
   }
 }

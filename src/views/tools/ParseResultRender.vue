@@ -33,7 +33,7 @@ function onToggle(idx) {
       <div class="header">
         <span :class="['down', {'right': item.collapse}]"><CaretDownFilled v-show="item.children"  @click="onToggle(idx)"/></span>
         <span class="prefix" v-show="item.prefix">{{ item.prefix }}</span>
-        <span class="expr">{{ item.expr }}</span>
+        <span class="content">{{ item.content }}</span>
         <span class="suffix" v-show="item.suffix">{{ item.suffix }}</span>
         <span class="explain">{{ item.explain }}</span>
         <span v-show="item.tip">
@@ -67,7 +67,7 @@ function onToggle(idx) {
       transform: rotate(-90deg);
     }
   }
-  .expr {
+  .content {
     line-height: 24px;
     background-color: #d9ecdd;
     padding: 2px 6px;

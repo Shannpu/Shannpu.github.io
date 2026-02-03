@@ -43,7 +43,7 @@ function toggleTheme(colorNew) {
   <div class="sp-layout">
     <nav class="nav">
       <div class="common">
-        <img class="logo" src="../assets/shanpu-logo.png" />
+        <img class="logo" src="../assets/shanpu-logo.png" @click="backHome" />
         <div class="datetime">
           <div>
             <span>{{ dateNow }}({{ weekNow }})</span>
@@ -55,7 +55,7 @@ function toggleTheme(colorNew) {
         </div>
       </div>
       <div class="setting-wrap">
-        <HomeFilled class="icon home"  @click="backHome"/>
+        <!-- <HomeFilled class="icon home"  @click="backHome"/> -->
         <a-dropdown :trigger="['click']" placement="bottom">
           <span class="icon">
             <img class="theme" src="../assets/theme-color.png" />

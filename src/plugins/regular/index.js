@@ -1,5 +1,6 @@
 import { toNodeArr } from "./nodeArr.js";
 import { toAstree, Node_Type } from "./astree.js";
+import { toTreemap } from "./treemap.js";
 
 class RegularDerive {
 
@@ -24,6 +25,9 @@ class RegularDerive {
     
     //  Astree 语法树
     this.ast = toAstree(this.str);
+
+    //  Treemap 矩形树
+    this.treemap = toTreemap(this.str);
   }
 
   /*

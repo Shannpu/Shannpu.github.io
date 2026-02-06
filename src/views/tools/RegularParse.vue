@@ -6,7 +6,9 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import ParseResultRender from "./ParseResultRender.vue";
+// import ParseResultRender from "@/widgets/ParseResultRender.vue";
+// import TreeRender from "@/widgets/tree-render/TreeRender.vue";
+import TreemapRender from "@/widgets/treemap-render/TreemapRender.vue";
 
 import RegularDerive from "@/plugins/regular";
 import { DESC_TIPS, parseRegular } from "@/utils/regular.js";
@@ -35,8 +37,15 @@ const astResTree = reactive({
   expand: true,
   children: [],
 });
+// 矩形树
+const treemapModel = reactive({
+  content: '矩形树',
+  type: 'root',
+  expand: true,
+  children: [],
+});
 // 解析结果, 不同展示形式
-const activeParseResultKey = ref('ast');
+const activeParseResultKey = ref('treemap');
 
 
 onMounted(() => {
@@ -53,9 +62,14 @@ function onParse() {
   // EBNF 解析的语法树
   let regDerive = new RegularDerive(regExp.value);
   console.log("RegularDerive:", regDerive);
-  
+
+  // 语法树
   astResTree.content = regExp.value;
   astResTree.children = setExpand(regDerive.ast, true);
+
+  // 矩形树
+  treemapModel.content = regExp.value;
+  treemapModel.children = [...regDerive.treemap];
 
   parseRes.value = regDerive.ast;
 }
@@ -81,7 +95,7 @@ function setExpand(arr, expand) {
     <div class="main">
 
       <div class="regular">
-        <p class="title">正则表达式 (暂不支持中文字符的 \u4e00 类似格式)</p>
+        <p class="title">正则表达式 (暂不支持Unicode字符; 如 \u4e00 格式)</p>
         <div class="regular-expression">
           <div class="btn" @click="onParse">Parse</div>
           <div class="prefix">/</div>
@@ -145,6 +159,14 @@ function setExpand(arr, expand) {
               </blocks-tree>
             </div>
           </a-tab-pane>
+          
+          <!-- 矩形树 -->
+          <a-tab-pane key="treemap" tab="矩形树">
+            <div class="parse-result">
+              <TreemapRender :data-source="treemapModel" />
+            </div>
+          </a-tab-pane>
+
         </a-tabs>
       </div>
 
@@ -218,6 +240,9 @@ function setExpand(arr, expand) {
   width: 100%;
   height: 100%;
 
+  letter-spacing: 1px;
+  font-family: "Source Code Pro", monospace;
+
   .main {
     padding: var(--size-page-space);
     display: flex;
@@ -249,6 +274,7 @@ function setExpand(arr, expand) {
   background-color: #fff;
   border-radius: 3px;
   border: 1px solid #d2d2d2;
+  letter-spacing: 1px;
   font-family: "Source Code Pro", monospace;
 
   display: flex;
@@ -299,6 +325,9 @@ function setExpand(arr, expand) {
   border: 1px solid #d2d2d2;
   padding: 16px 16px;
   overflow: auto;
+
+  letter-spacing: 1px;
+  font-family: "Source Code Pro", monospace;
 
   .node-wrap {
     display: flex;

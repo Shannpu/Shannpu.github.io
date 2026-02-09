@@ -9,6 +9,7 @@ import { ref, reactive, onMounted } from 'vue';
 // import ParseResultRender from "@/widgets/ParseResultRender.vue";
 // import TreeRender from "@/widgets/tree-render/TreeRender.vue";
 import TreemapRender from "@/widgets/treemap-render/TreemapRender.vue";
+// import PathoRender from "@/widgets/patho-node/PathoRender.vue";
 
 import RegularDerive from "@/plugins/regular";
 import { DESC_TIPS, parseRegular } from "@/utils/regular.js";
@@ -45,8 +46,9 @@ const treemapModel = reactive({
   children: [],
 });
 // 解析结果, 不同展示形式
-const activeParseResultKey = ref('treemap');
-
+const activeParseResultKey = ref('ast');
+// 悬浮高亮激活项 key
+const activeBoxKey = ref('');
 
 onMounted(() => {
 });
@@ -163,7 +165,10 @@ function setExpand(arr, expand) {
           <!-- 矩形树 -->
           <a-tab-pane key="treemap" tab="矩形树">
             <div class="parse-result">
-              <TreemapRender :data-source="treemapModel" />
+              <treemap-render 
+                :data-source="treemapModel" 
+                v-model:active-box-key="activeBoxKey" 
+              />
             </div>
           </a-tab-pane>
 

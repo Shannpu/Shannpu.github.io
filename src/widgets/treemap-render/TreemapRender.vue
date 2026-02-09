@@ -10,17 +10,28 @@
  * 父类的属性
  */
 const _props = defineProps({
+  // 渲染项内容
   dataSource: {
     type: Object,
     default: () => ({})
   },
+  // [颜色递减] 层级，每层增1，从 1 开始
   level: {
     type: Number,
     default: 1
   },
+  // [悬浮高亮效果] 当前的主键：使用 index 与 - 拼接，从 0 开始
+  currentKey: {
+    type: String,
+    default: "0"
+  },
 });
-
-
+/**
+ * 父类的双向响应属性
+ */
+const activeBoxKey = defineModel(
+  "activeBoxKey", { type: String }
+);
 
 
 /**
@@ -48,11 +59,47 @@ function getContTextColor(level) {
   ]
   return mapping[ind];
 }
+
+/**
+ * 获取盒子的透明度
+ * @param params 
+ */
+function getBoxOpacity() {
+  const curr = _props.currentKey; // 这个肯定有值
+  const active = activeBoxKey.value; // 不激活时没值
+
+  // 不激活时
+  if (!active) {
+    return 1;
+  }
+
+  // 激活时，激活项不透明
+  if (curr.startsWith(active)) {
+    return 1;
+  } else {
+    return 0.2;
+  }
+}
+
+/**
+ * 事件: 鼠标移入内容
+ */
+function onMouseEnter() {
+  activeBoxKey.value = _props.currentKey;
+}
+
+/**
+ * 事件: 鼠标移出内容
+ */
+function onMouseLeave() {
+  activeBoxKey.value = "";
+}
+
 </script> 
 
 <template>
   <div class="box">
-    <div class="content" :class="dataSource.type" >
+    <div class="content" :class="dataSource.type" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave">
       <span class="prefix" v-show="dataSource.prefix">{{ dataSource.prefix }}</span>
       <span>{{ dataSource.content }}</span>
       <span class="suffix" v-show="dataSource.suffix">{{ dataSource.suffix }}</span>
@@ -61,10 +108,12 @@ function getContTextColor(level) {
     <div class="child" v-if="dataSource.children">
       <treemap-render 
         class="box" 
-        v-for="child in dataSource.children" 
+        v-for="(child, index) in dataSource.children" 
         :data-source="child" 
         :style="{'flex-grow': child.content?.length ?? 1}"
         :level="level + 1"
+        :current-key="currentKey + '-' + index"
+        v-model:active-box-key="activeBoxKey"
       >
       </treemap-render>
     </div>
@@ -96,6 +145,7 @@ function getContTextColor(level) {
   flex: 1 1 auto;
   
   .content {
+    opacity: v-bind(getBoxOpacity(activeBoxKey));
     padding: 4px 8px;
     background-color: v-bind(getContBgColor(level));
     color: v-bind(getContTextColor(level));

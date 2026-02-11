@@ -22,6 +22,7 @@ const studys_list = [
 const tools_list = [
   {name: "色值转换", iconSrc: colorNoSAlphaImg, routerPath: "/tools/colortrans"},
   {name: "正则解析器", iconSrc: regexpImg, routerPath: "/tools/regular"},
+  // {name: "命名格式转换", iconSrc: regexpImg, routerPath: "/tools/conversion"},
 ];
 </script> 
 

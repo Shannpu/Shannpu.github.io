@@ -119,7 +119,7 @@ function saveModal() {
 }
 
 .chinese-frame {
-  padding: 16px;
+  padding: 12px;
   /* background: 
     linear-gradient(to right, #8B4513 0%, #CD853F 50%, #8B4513 100%) left top no-repeat,
     linear-gradient(to right, #8B4513 0%, #CD853F 50%, #8B4513 100%) right top no-repeat,
@@ -158,7 +158,7 @@ function saveModal() {
 .container {
   text-align: center;
   background: #fff;
-  padding: 40px 30px;
+  padding: 32px 24px;
   position: relative;
   border: 2px solid #deb887;
 }
@@ -302,7 +302,7 @@ function saveModal() {
 }
 
 .price-desc {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
   margin-top: 16px;
   line-height: 1.8;
@@ -310,7 +310,7 @@ function saveModal() {
 }
 
 .notice {
-  font-size: clamp(0.75rem, 3.2vw, 0.85rem);
+  font-size: 16px;
   color: #666;
   margin-top: 16px;
   padding-top: 16px;
@@ -320,7 +320,7 @@ function saveModal() {
 }
 
 .notice-title {
-  font-size: 15px;
+  font-size: 16px;
   color: #8B4513;
   font-weight: 600;
   margin-bottom: 12px;
@@ -331,6 +331,6 @@ function saveModal() {
   margin: 8px 0;
   text-align: justify;
   text-indent: 2em;
-  font-size: 14px;
+  font-size: 15px;
 }
 </style>

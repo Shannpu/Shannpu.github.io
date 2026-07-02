@@ -210,7 +210,7 @@ function saveModal() {
 }
 
 .title {
-  font-size: clamp(1.8rem, 8vw, 2.3rem);
+  font-size: 28px;
   font-weight: 700;
   color: #333;
   letter-spacing: 4px;
@@ -218,7 +218,7 @@ function saveModal() {
 }
 
 .subtitle {
-  font-size: clamp(1rem, 4.5vw, 1.15rem);
+  font-size: 16px;
   color: #666;
   margin-bottom: 16px;
   letter-spacing: 2px;
@@ -236,7 +236,7 @@ function saveModal() {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   // display: grid;
   // grid-template-columns: repeat(4, 1fr);
   // gap: 12px 8px;
@@ -251,10 +251,10 @@ function saveModal() {
 // }
 
 .type-item {
-  font-size: clamp(0.8rem, 4vw, 0.95rem);
+  font-size: 15px;
   color: #555;
   background: linear-gradient(180deg, #faf8f5 0%, #f0ebe5 100%);
-  padding: 4px 8px;
+  padding: 4px 6px;
   border: 1px solid #e8dcc8;
   border-radius: 6px;
   font-weight: 500;
@@ -290,19 +290,19 @@ function saveModal() {
 }
 
 .price-title {
-  font-size: clamp(1.1rem, 5vw, 1.4rem);
+  font-size: 18px;
   color: #333;
 }
 
 .price-subtitle {
-  font-size: clamp(1rem, 4.5vw, 1.2rem);
+  font-size: 18px;
   font-weight: 700;
   color: #8B4513;
   letter-spacing: 2px;
 }
 
 .price-desc {
-  font-size: clamp(0.75rem, 3.2vw, 0.85rem);
+  font-size: 14px;
   color: #666;
   margin-top: 16px;
   line-height: 1.8;
@@ -320,7 +320,7 @@ function saveModal() {
 }
 
 .notice-title {
-  font-size: clamp(0.85rem, 3.5vw, 0.95rem);
+  font-size: 15px;
   color: #8B4513;
   font-weight: 600;
   margin-bottom: 12px;
@@ -331,5 +331,6 @@ function saveModal() {
   margin: 8px 0;
   text-align: justify;
   text-indent: 2em;
+  font-size: 14px;
 }
 </style>

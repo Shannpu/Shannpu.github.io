@@ -290,12 +290,12 @@ function saveModal() {
 }
 
 .price-title {
-  font-size: 18px;
+  font-size: 20px;
   color: #333;
 }
 
 .price-subtitle {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   color: #8B4513;
   letter-spacing: 2px;

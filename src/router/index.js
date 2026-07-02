@@ -25,8 +25,13 @@ const router = createRouter({
           path: "conversion",
           component: () => import("@/views/tools/CaseConversion.vue"),
         },
+        // 清息
+        {
+          path: "qingxi",
+          component: () => import("@/views/qingxi/Qingxi.vue"),
+        },
       ]
-    }
+    },
   ],
 })
 
